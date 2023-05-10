@@ -1,17 +1,6 @@
 package com.spring.dependency;
 
-import javax.inject.Inject;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.stereotype.Component;
-
-@Component("tv")
 public class SamsungTV implements TV {
-	
-	@Inject
-	@Qualifier("apple")
-//	@Autowired
 	private  Speaker speaker; // has-a (포함) 관계
 	
 	//매개변수를 받지 않는 생성자 : default 생성자

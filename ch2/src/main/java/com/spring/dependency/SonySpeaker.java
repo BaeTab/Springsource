@@ -1,4 +1,4 @@
-package com.spring.dependecy;
+package com.spring.dependency;
 
 public class SonySpeaker implements Speaker {
 	public SonySpeaker() {
