@@ -15,11 +15,11 @@ import com.spring.domain.BoardDTO;
 
 @Repository
 public class BoardDAO {
-	
+
 	private Connection con;
 	private PreparedStatement pstmt;
 	private ResultSet rs;
-	
+
 	static {
 		try {
 			Class.forName("oracle.jdbc.OracleDriver");
@@ -27,6 +27,7 @@ public class BoardDAO {
 			e.printStackTrace();
 		}
 	}
+
 	public Connection getConnection() {
 		String url = "jdbc:oracle:thin:@localhost:1521:xe";
 		String user = "javadb";
@@ -41,6 +42,7 @@ public class BoardDAO {
 
 		return con;
 	}
+
 	public void close(Connection con, PreparedStatement pstmt, ResultSet rs) {
 		try {
 			rs.close();
@@ -75,18 +77,18 @@ public class BoardDAO {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public boolean insert(BoardDTO dto) {
-		//title,content,writer
+		// title,content,writer
 		boolean flag = false;
 		try {
 			con = getConnection();
 			String sql = "insert into spring_board(bno,title,content,writer) values(seq_board.nextval,?,?,?) ";
 			pstmt = con.prepareStatement(sql);
-			pstmt.setString(1,dto.getTitle());
-			pstmt.setString(2,dto.getContent());
+			pstmt.setString(1, dto.getTitle());
+			pstmt.setString(2, dto.getContent());
 			pstmt.setString(3, dto.getWriter());
-			
+
 			int result = pstmt.executeUpdate();
 			if (result > 0) {
 				flag = true;
@@ -95,12 +97,12 @@ public class BoardDAO {
 		} catch (Exception e) {
 			rollback(con);
 			e.printStackTrace();
-		}finally {
-			close(con,pstmt);
+		} finally {
+			close(con, pstmt);
 		}
 		return flag;
 	}
-	
+
 	public List<BoardDTO> getList() {
 		List<BoardDTO> list = new ArrayList<BoardDTO>();
 
@@ -113,7 +115,7 @@ public class BoardDAO {
 
 			while (rs.next()) {
 				BoardDTO dto = new BoardDTO();
-				
+
 				dto.setBno(rs.getInt("bno"));
 				dto.setTitle(rs.getString("title"));
 				dto.setContent(rs.getString("content"));
@@ -129,6 +131,7 @@ public class BoardDAO {
 		}
 		return list;
 	}
+
 	public boolean delete(int bno) {
 		boolean flag = false;
 
@@ -152,9 +155,9 @@ public class BoardDAO {
 
 		return flag;
 	}
-	
+
 	public boolean update(BoardDTO dto) {
-		//title,content,updatedate
+		// title,content,updatedate
 		boolean flag = false;
 
 		try {
@@ -164,9 +167,9 @@ public class BoardDAO {
 			pstmt.setString(1, dto.getTitle());
 			pstmt.setString(2, dto.getContent());
 			pstmt.setInt(3, dto.getBno());
-			
+
 			int result = pstmt.executeUpdate();
-			
+
 			if (result > 0) {
 				flag = true;
 				commit(con);
@@ -180,8 +183,8 @@ public class BoardDAO {
 
 		return flag;
 	}
-	
-	//특정 게시물 조회
+
+	// 특정 게시물 조회
 	public BoardDTO getRow(int bno) {
 		BoardDTO dto = null;
 		try {
@@ -198,7 +201,7 @@ public class BoardDAO {
 				dto.setWriter(rs.getString("writer"));
 				dto.setContent(rs.getString("content"));
 				dto.setRegdate(rs.getDate("regdate"));
-				dto.setUpdatedate(rs.getDate("updatedate"));				
+				dto.setUpdatedate(rs.getDate("updatedate"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -207,5 +210,5 @@ public class BoardDAO {
 		}
 		return dto;
 	}
-	
+
 }
